@@ -1,0 +1,14 @@
+[
+    {   
+        "question": "Como te llamas?",
+        "answer": "Ramiro"
+    },
+    {   
+        "question": "¿Cuantos años tenes?",
+        "answer": "25"
+    },
+    {   
+        "question": "¿Que comiste hoy?",
+        "answer": "Milanesa con ensalada"
+    }
+]

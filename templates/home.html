@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Ramiro</title>
-</head>
+{% extends "base.html" %}
 
+{% block title %} Bienvenido {% endblock %}
 
-<body>
+{% block content %}
     <h1>Hola</h1>
     <img src="/static/images.jpg">
     <p>{{message}}</p>
@@ -20,5 +16,5 @@
             </li>
         {% endfor %}
     </ul>
-</body>
-</html>
+    <a href="{{url_for('add_card') }}" >Add a Card</a>
+{% endblock %}

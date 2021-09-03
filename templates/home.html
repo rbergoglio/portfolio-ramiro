@@ -1,10 +1,91 @@
 {% extends "base.html" %}
+{% set active_page = 'home' %}
 
 {% block title %} Bienvenido {% endblock %}
 
 {% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <div class="my-4">
+            <h1>Filters</h1>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="row my-5 card-wrapper">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <a href="#">
+                            <img class="card-img-top embed-responsive-item"
+                                src="{{url_for('static', filename='images/images.jpg')}} ">
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="#"> Card title</a>
+                        </h4>
+                        <h5>$10</h5>
+                        <p class="card-text">Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            Category -> Subcategory
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <a href="#">
+                            <img class="card-img-top embed-responsive-item"
+                                src="{{url_for('static', filename='images/images.jpg')}} ">
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="#"> Card title</a>
+                        </h4>
+                        <h5>$10</h5>
+                        <p class="card-text">Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            Category -> Subcategory
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <a href="#">
+                            <img class="card-img-top embed-responsive-item"
+                                src="{{url_for('static', filename='images/images.jpg')}} ">
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="#"> Card title</a>
+                        </h4>
+                        <h5>$10</h5>
+                        <p class="card-text">Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            Category -> Subcategory
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 
     <h1>Hola</h1>
-    <img src="/static/images.jpg">
     <p>{{message}}</p>
     <h2>Flash Cards</h2>
     <ul>
@@ -17,4 +98,6 @@
         {% endfor %}
     </ul>
     <a href="{{url_for('add_card') }}" >Add a Card</a>
-{% endblock %}
+
+-->
+    {% endblock %}

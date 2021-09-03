@@ -1,12 +1,17 @@
-from datetime import datetime
-from flask import Flask, render_template, abort, jsonify, request, redirect, url_for
-
-app = Flask(__name__)
-
 #Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 #.venv\scripts\activate        
 #$env:FLASK_ENV = "development"
 #flask run
+
+
+#pip freeze > requirements.txt
+#pip install -r requirements.txt
+
+
+from datetime import datetime
+from flask import Flask, render_template, abort, jsonify, request, redirect, url_for
+
+app = Flask(__name__)
 
 from model import db, save_db
 

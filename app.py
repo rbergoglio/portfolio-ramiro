@@ -7,7 +7,7 @@
 #pip freeze > requirements.txt
 #pip install -r requirements.txt
 
-
+import pdb
 from datetime import datetime
 from flask import Flask, render_template, abort, jsonify, request, redirect, url_for
 
@@ -47,15 +47,14 @@ def api_card_detail(index):
     except IndexError:
         abort(404)
 
-@app.route("/add_card",methods=["GET","POST"])
-def add_card():
+@app.route("/item/new",methods=["GET","POST"])
+def new_item():
     if request.method == "POST":
-        card = {"question": request.form['question'], "answer": request.form['answer']}
-        db.append(card)
-        save_db()
-        return redirect(url_for('card_view',index=len(db) -1))
+       # pdb.set_trace()
+       #
+        return redirect(url_for('home'))
     else:
-        return render_template("add_card.html")
+        return render_template("new_item.html")
 
 @app.route("/remove_card/<int:index>",methods=["GET","POST"])
 def remove_card(index):

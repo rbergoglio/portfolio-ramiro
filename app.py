@@ -14,40 +14,33 @@ from flask import Flask, render_template, abort, jsonify, request, redirect, url
 import sqlite3
 
 app = Flask(__name__)
-
-from model import db, save_db
-
 counter = 0
 
 @app.route("/")
 def home():
-    return render_template("home.html", cards=db)
+    conn = get_db()
+    c = conn.cursor()
 
+    items_from_db = c.execute("""SELECT i.id, i.title, i.description, i.price, i.image, c.name, s.name
+    FROM items AS i
+    INNER JOIN categories AS c ON i.category_id = c.id 
+    INNER JOIN subcategories AS s ON i.subcategory_id = s.id  
+    ORDER BY i.id DESC""")
 
-@app.route("/date")
-def date():
-    return "<p>Hello, World!</p>" + str(datetime.now())
+    items = []
+    for row in items_from_db:
+        item = {
+            "id": row[0],
+            "description": row[1],
+            "price": row[3],
+            "image":row[4],
+            "category":row[5],
+            "subcategory":row[6]
+        }
+        items.append(item)
 
-@app.route("/card/<int:index>")
-def card_view(index):
-    try:
-        card = db[index]
-        return render_template("card.html", card=card, index=index, max_index=len(db)-1)
-    except IndexError:
-        abort(404)
+    return render_template("home.html", items = items)
 
-
-
-@app.route("/api/card")
-def api_card_list():
-    return jsonify(db)
-
-@app.route("/api/card/<int:index>")
-def api_card_detail(index):
-    try:
-        return db[index]
-    except IndexError:
-        abort(404)
 
 @app.route("/item/new",methods=["GET","POST"])
 def new_item():
@@ -68,18 +61,6 @@ def new_item():
         return redirect(url_for('home'))
     else:
         return render_template("new_item.html")
-
-@app.route("/remove_card/<int:index>",methods=["GET","POST"])
-def remove_card(index):
-    try:
-        if request.method == "POST":
-            del db[index]
-            save_db()
-            return redirect(url_for('home'))
-        else:
-            return render_template("remove_card.html", card=db[index])
-    except IndexError:
-        abort(404)
 
 
 def get_db():

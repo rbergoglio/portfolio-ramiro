@@ -15,15 +15,18 @@ from flask_wtf import FlaskForm
 
 import sqlite3
 
-from wtforms import StringField, TextAreaField, SubmitField
+from wtforms import StringField, TextAreaField, SubmitField, SelectField, DecimalField
+from wtforms.validators import InputRequired, DataRequired, Length
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secretkey"
 
 class NewItemForm(FlaskForm):
-    title           = StringField("Title")
-    price           = StringField("Price")
-    description     = TextAreaField("Description")
+    title           = StringField("Title", validators=[InputRequired("Input is invalid"), DataRequired("Data is required"), Length(min=5, max=20, message="Input must be between 5 and 20 characters long")])
+    price           = DecimalField("Price")
+    description     = TextAreaField("Description", validators=[InputRequired("Input is invalid"), DataRequired("Data is required"), Length(min=5, max=40, message="Input must be between 5 and 40 characters long")])
+    category        = SelectField("Category", coerce=int)
+    subcategory     = SelectField("Subcategory", coerce=int)
     submit          = SubmitField("Submit")
 
 @app.route("/")
@@ -56,10 +59,21 @@ def home():
 def new_item():
     conn = get_db()
     c = conn.cursor()
-
     form = NewItemForm()
 
-    if request.method == "POST":
+    c.execute(""" SELECT id, name FROM categories """)
+    categories = c.fetchall()
+
+    form.category.choices = categories
+
+    c.execute(""" SELECT id, name FROM subcategories WHERE category_id = ?""",(2,))
+    subcategories = c.fetchall()
+
+    form.subcategory.choices = subcategories
+
+    #if request.method == "POST":
+    #validate_on_submit -> consider submitted if the request is POST, PUT, PATCH delete AND calls validate on each field if it was submitted
+    if form.validate_on_submit():
         # pdb.set_trace()
         c.execute(""" INSERT INTO items (title, description, price, image, category_id, subcategory_id) VALUES (?,?,?,?,?,?) """,
         (
@@ -67,14 +81,18 @@ def new_item():
             form.description.data,
             float(form.price.data),
             "",
-            1,
-            1
+            form.category.data,
+            form.subcategory.data
         )) 
         conn.commit()
         flash("Item {} has ben succesfully submitted".format(request.form.get("title")), "success"),
         return redirect(url_for('home'))
-    else:
-        return render_template("new_item.html", form=form)
+    
+    #errores del validate
+    if form.errors:
+        flash("{}".format(form.errors),"danger")
+
+    return render_template("new_item.html", form=form)
 
 
 def get_db():
@@ -84,7 +102,7 @@ def get_db():
         db = g.database = sqlite3.connect("db/rbwebshop.db")
     return db
 
-#este decorador hace que se ejecute cuando termina el contexto de la app.  cuando la request termina esta funcion va a cerrar la coneccion 
+#este decorador hace que se ejecute cuando termina el contexto de la app.  cuando la request termina esta funcion va a cerrar la conexión 
 @app.teardown_appcontext   
 def close_connection(exception):
     db = getattr(g,"_database", None)
